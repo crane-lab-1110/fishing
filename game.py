@@ -1,3 +1,4 @@
+import os
 import pygame
 import math
 import random
@@ -19,14 +20,22 @@ GOAL_Y = 115         # drag above this y to catch
 GOAL_HALF_W = 155    # ±x from center for goal zone
 HOOK_REST_X = SCREEN_W // 2
 HOOK_REST_Y = 88
-FONT_PATH = '/usr/share/fonts/opentype/ipafont-gothic/ipagp.ttf'
+
+_FONT_CANDIDATES = [
+    os.path.join(os.path.dirname(__file__), 'assets', 'fonts', 'ipagp.ttf'),
+    '/usr/share/fonts/opentype/ipafont-gothic/ipagp.ttf',
+    '/usr/share/fonts/truetype/fonts-japanese-gothic.ttf',
+]
+FONT_PATH = next((p for p in _FONT_CANDIDATES if os.path.exists(p)), None)
 
 
 def _try_font(path, size):
-    try:
-        return pygame.font.Font(path, size)
-    except Exception:
-        return pygame.font.SysFont(None, size + 10)
+    if path:
+        try:
+            return pygame.font.Font(path, size)
+        except Exception:
+            pass
+    return pygame.font.SysFont(None, size + 10)
 
 
 class ScorePopup:

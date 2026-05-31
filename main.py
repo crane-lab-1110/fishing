@@ -1,3 +1,4 @@
+import asyncio
 import pygame
 import sys
 from game import Game
@@ -6,7 +7,7 @@ SCREEN_W = 1280
 SCREEN_H = 720
 
 
-def main():
+async def main():
     pygame.init()
     pygame.mixer.init(frequency=44100, size=-16, channels=2, buffer=512)
 
@@ -28,7 +29,7 @@ def main():
         game.update(dt)
         game.draw()
         pygame.display.flip()
+        await asyncio.sleep(0)  # required for pygbag / browser
 
 
-if __name__ == '__main__':
-    main()
+asyncio.run(main())
